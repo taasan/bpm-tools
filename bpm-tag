@@ -84,16 +84,16 @@ shift
 # Don't overwrite an existing BPM tag
 
 case "$FILE" in
-*.flac)
+*.[fF][lL][aA][cC])
 	BPM=`metaflac --show-tag=BPM "$FILE" | sed -e 's/BPM=//'`
 	;;
-*.mp3)
+*.[mM][pP]3)
 	BPM=`id3v2 -R "$FILE" | sed -n 's/^TBPM.*: \([0-9\.]\+\)/\1/p'`
 	;;
-*.ogg)
+*.[oO][gG][gG])
 	BPM=`vorbiscomment "$FILE" | sed -n 's/^BPM=//p'`
 	;;
-*.m4a)
+*.[mM]4[aA])
 	BPM=`mp4info "$FILE" | sed -n 's/^\s*BPM://p'`
 	;;
 *)
@@ -123,16 +123,16 @@ fi
 # Write a BPM tag
 
 case "$FILE" in
-*.flac)
+*.[fF][lL][aA][cC])
 	metaflac --remove-tag=BPM --set-tag="BPM=$BPM" "$FILE"
 	;;
-*.mp3)
+*.[mM][pP]3)
 	id3v2 --TBPM "$BPM" "$FILE"
 	;;
-*.ogg)
+*.[oO][gG][gG])
 	vorbiscomment -at "BPM=$BPM" "$FILE"
 	;;
-*.m4a)
+*.[mM]4[aA])
 	mp4tags -tempo "$BPM" "$FILE"
 	;;
 *)
